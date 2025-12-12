@@ -1,5 +1,5 @@
 import { Mail, Phone, MapPin, Briefcase, CheckCircle2, Clock } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { ListCard } from './ui/reusable-cards';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Avatar, AvatarFallback } from './ui/avatar';
@@ -109,17 +109,11 @@ const getStatusIcon = (status: string) => {
 
 export function EmployeeTable() {
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle>Today's Employee Overview</CardTitle>
-            <CardDescription>Real-time attendance and employee status</CardDescription>
-          </div>
-          <Button>View All Employees</Button>
-        </div>
-      </CardHeader>
-      <CardContent>
+    <ListCard
+      title="Today's Employee Overview"
+      description="Real-time attendance and employee status"
+      action={<Button>View All Employees</Button>}
+    >
         <div className="space-y-3">
           {employees.map((employee) => (
             <div 
@@ -193,7 +187,6 @@ export function EmployeeTable() {
             View Complete List →
           </Button>
         </div>
-      </CardContent>
-    </Card>
+    </ListCard>
   );
 }

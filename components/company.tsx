@@ -1,27 +1,12 @@
 import { useState, useMemo } from 'react';
 import { Plus, Eye, Pencil, Trash2, Search, Building2, Calendar, AlertCircle } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { InfoCard, ListCard, EmptyStateCard } from './ui/reusable-cards';
+import { Input } from './ui/input';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from './ui/dialog';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from './ui/alert-dialog';
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from './ui/dialog';
+import { ViewDialog, EditDialog, DeleteDialog, TextFormField, TextareaFormField } from './ui/reusable-dialogs';
 import {
   Select,
   SelectContent,
@@ -29,9 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from './ui/select';
-import { Input } from './ui/input';
-import { Label } from './ui/label';
-import { Textarea } from './ui/textarea';
+
 import { ScrollArea } from './ui/scroll-area';
 
 interface Company {
@@ -232,68 +215,36 @@ export function Company() {
     <div className="space-y-6">
       {/* Statistics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center space-x-2">
-              <Building2 className="size-5 text-blue-600" />
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Total Companies</p>
-                <p className="text-2xl font-bold text-blue-600">{stats.total}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center space-x-2">
-              <Building2 className="size-5 text-green-600" />
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Active</p>
-                <p className="text-2xl font-bold text-green-600">{stats.active}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center space-x-2">
-              <AlertCircle className="size-5 text-gray-500" />
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Inactive</p>
-                <p className="text-2xl font-bold text-gray-500">{stats.inactive}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center space-x-2">
-              <Calendar className="size-5 text-orange-600" />
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Recently Updated</p>
-                <p className="text-2xl font-bold text-orange-600">{stats.recentlyUpdated}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <InfoCard
+          icon={Building2}
+          title="Total Companies"
+          value={stats.total}
+        />
+        <InfoCard
+          icon={Building2}
+          title="Active"
+          value={stats.active}
+          status={{ text: "Active", variant: "default" }}
+        />
+        <InfoCard
+          icon={AlertCircle}
+          title="Inactive"
+          value={stats.inactive}
+          status={{ text: "Inactive", variant: "secondary" }}
+        />
+        <InfoCard
+          icon={Calendar}
+          title="Recently Updated"
+          value={stats.recentlyUpdated}
+        />
       </div>
 
       {/* Main Content */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle className="flex items-center gap-2">
-                <Building2 className="size-5" />
-                Company Management
-              </CardTitle>
-              <CardDescription>Manage company information and settings</CardDescription>
-            </div>
-            
-            <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+      <ListCard
+        title="Company Management"
+        description="Manage company information and settings"
+        action={
+          <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
               <DialogTrigger asChild>
                 <Button>
                   <Plus className="size-4" />
@@ -310,42 +261,30 @@ export function Company() {
                   </DialogHeader>
                   
                   <div className="grid gap-4 py-4">
-                    <div className="grid gap-2">
-                      <Label htmlFor="companyId">Company ID</Label>
-                      <Input
-                        id="companyId"
-                        name="companyId"
-                        placeholder="COM-005"
-                        value={formData.companyId}
-                        onChange={handleInputChange}
-                        required
-                      />
-                    </div>
-                    
-                    <div className="grid gap-2">
-                      <Label htmlFor="name">Company Name</Label>
-                      <Input
-                        id="name"
-                        name="name"
-                        placeholder="Enter company name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        required
-                      />
-                    </div>
-                    
-                    <div className="grid gap-2">
-                      <Label htmlFor="description">Description</Label>
-                      <Textarea
-                        id="description"
-                        name="description"
-                        placeholder="Enter company description"
-                        value={formData.description}
-                        onChange={handleInputChange}
-                        rows={4}
-                        required
-                      />
-                    </div>
+                    <TextFormField
+                      label="Company ID"
+                      name="companyId"
+                      value={formData.companyId}
+                      onChange={handleInputChange}
+                      placeholder="COM-005"
+                      required
+                    />
+                    <TextFormField
+                      label="Company Name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      placeholder="Enter company name"
+                      required
+                    />
+                    <TextareaFormField
+                      label="Description"
+                      name="description"
+                      value={formData.description}
+                      onChange={handleInputChange}
+                      placeholder="Enter company description"
+                      required
+                    />
                   </div>
                   
                   <DialogFooter>
@@ -360,11 +299,9 @@ export function Company() {
                   </DialogFooter>
                 </form>
               </DialogContent>
-            </Dialog>
-          </div>
-        </CardHeader>
-        
-        <CardContent>
+          </Dialog>
+        }
+      >
           {/* Search and Filter Section */}
           <div className="flex items-center gap-4 mb-6">
             <div className="relative flex-1">
@@ -455,166 +392,84 @@ export function Company() {
                   </Card>
                 ))
               ) : (
-                <Card>
-                  <CardContent className="p-12 text-center">
-                    <Building2 className="size-12 text-muted-foreground mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold mb-2">No companies found</h3>
-                    <p className="text-muted-foreground">
-                      {searchTerm || statusFilter !== 'all' 
-                        ? 'Try adjusting your search or filter criteria.'
-                        : 'Get started by adding your first company.'
-                      }
-                    </p>
-                  </CardContent>
-                </Card>
+                <EmptyStateCard
+                  icon={Building2}
+                  title="No companies found"
+                  description={
+                    searchTerm || statusFilter !== 'all' 
+                      ? 'Try adjusting your search or filter criteria.'
+                      : 'Get started by adding your first company.'
+                  }
+                />
               )}
             </div>
           </ScrollArea>
-        </CardContent>
-      </Card>
+      </ListCard>
 
-      {/* View Dialog */}
-      <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
-        <DialogContent className="sm:max-w-[500px]">
-          <DialogHeader>
-            <DialogTitle>Company Details</DialogTitle>
-            <DialogDescription>
-              View complete information about this company.
-            </DialogDescription>
-          </DialogHeader>
-          
-          {selectedCompany && (
-            <div className="grid gap-4 py-4">
-              <div className="grid gap-2">
-                <Label className="text-muted-foreground">Company ID</Label>
-                <div className="text-sm">{selectedCompany.companyId}</div>
-              </div>
-              
-              <div className="grid gap-2">
-                <Label className="text-muted-foreground">Company Name</Label>
-                <div className="text-sm">{selectedCompany.name}</div>
-              </div>
-              
-              <div className="grid gap-2">
-                <Label className="text-muted-foreground">Description</Label>
-                <div className="text-sm">{selectedCompany.description}</div>
-              </div>
-              
-              <div className="grid gap-2">
-                <Label className="text-muted-foreground">Status</Label>
-                <div>
-                  <Badge variant={selectedCompany.status === 'Active' ? 'default' : 'secondary'}>
-                    {selectedCompany.status}
-                  </Badge>
-                </div>
-              </div>
+      <ViewDialog
+        open={isViewDialogOpen}
+        onOpenChange={setIsViewDialogOpen}
+        title="Company Details"
+        description="View complete information about this company."
+        data={selectedCompany}
+        fields={[
+          { key: 'companyId', label: 'Company ID' },
+          { key: 'name', label: 'Company Name' },
+          { key: 'description', label: 'Description' },
+          { 
+            key: 'status', 
+            label: 'Status',
+            render: (value) => (
+              <Badge variant={value === 'Active' ? 'default' : 'secondary'}>
+                {value}
+              </Badge>
+            )
+          },
+          { key: 'createdAt', label: 'Created Date', render: (value) => formatDate(value) },
+          { key: 'updatedAt', label: 'Last Updated', render: (value) => formatDate(value) }
+        ]}
+      />
 
-              <div className="grid gap-2">
-                <Label className="text-muted-foreground">Created Date</Label>
-                <div className="text-sm">{formatDate(selectedCompany.createdAt)}</div>
-              </div>
+      <EditDialog
+        open={isEditDialogOpen}
+        onOpenChange={setIsEditDialogOpen}
+        title="Edit Company"
+        description="Update the company details below. Click save when you're done."
+        onSubmit={handleEditSubmit}
+        onCancel={() => {
+          setIsEditDialogOpen(false);
+          setFormData({ companyId: '', name: '', description: '' });
+        }}
+      >
+        <TextFormField
+          label="Company ID"
+          name="companyId"
+          value={formData.companyId}
+          onChange={handleInputChange}
+          required
+        />
+        <TextFormField
+          label="Company Name"
+          name="name"
+          value={formData.name}
+          onChange={handleInputChange}
+          required
+        />
+        <TextareaFormField
+          label="Description"
+          name="description"
+          value={formData.description}
+          onChange={handleInputChange}
+          required
+        />
+      </EditDialog>
 
-              <div className="grid gap-2">
-                <Label className="text-muted-foreground">Last Updated</Label>
-                <div className="text-sm">{formatDate(selectedCompany.updatedAt)}</div>
-              </div>
-            </div>
-          )}
-          
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsViewDialogOpen(false)}>
-              Close
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Edit Dialog */}
-      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent className="sm:max-w-[500px]">
-          <form onSubmit={handleEditSubmit}>
-            <DialogHeader>
-              <DialogTitle>Edit Company</DialogTitle>
-              <DialogDescription>
-                Update the company details below. Click save when you're done.
-              </DialogDescription>
-            </DialogHeader>
-            
-            <div className="grid gap-4 py-4">
-              <div className="grid gap-2">
-                <Label htmlFor="edit-companyId">Company ID</Label>
-                <Input
-                  id="edit-companyId"
-                  name="companyId"
-                  value={formData.companyId}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-              
-              <div className="grid gap-2">
-                <Label htmlFor="edit-name">Company Name</Label>
-                <Input
-                  id="edit-name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-              
-              <div className="grid gap-2">
-                <Label htmlFor="edit-description">Description</Label>
-                <Textarea
-                  id="edit-description"
-                  name="description"
-                  value={formData.description}
-                  onChange={handleInputChange}
-                  rows={4}
-                  required
-                />
-              </div>
-            </div>
-            
-            <DialogFooter>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => {
-                  setIsEditDialogOpen(false);
-                  setFormData({ companyId: '', name: '', description: '' });
-                }}
-              >
-                Cancel
-              </Button>
-              <Button type="submit">Save Changes</Button>
-            </DialogFooter>
-          </form>
-        </DialogContent>
-      </Dialog>
-
-      {/* Delete Confirmation Dialog */}
-      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete the company
-              <span className="font-semibold"> {selectedCompany?.name}</span> and remove 
-              all associated data from the system.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleDelete}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <DeleteDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+        description={`This action cannot be undone. This will permanently delete the company ${selectedCompany?.name} and remove all associated data from the system.`}
+        onConfirm={handleDelete}
+      />
     </div>
   );
 }
