@@ -285,28 +285,28 @@ export function Role() {
 
   const getRoleColor = (color: string) => {
     const colors = {
-      red: 'bg-red-100 dark:bg-red-950/30 border-red-200 dark:border-red-900',
-      blue: 'bg-blue-100 dark:bg-blue-950/30 border-blue-200 dark:border-blue-900',
-      green: 'bg-green-100 dark:bg-green-950/30 border-green-200 dark:border-green-900',
-      purple: 'bg-purple-100 dark:bg-purple-950/30 border-purple-200 dark:border-purple-900',
-      yellow: 'bg-yellow-100 dark:bg-yellow-950/30 border-yellow-200 dark:border-yellow-900',
-      orange: 'bg-orange-100 dark:bg-orange-950/30 border-orange-200 dark:border-orange-900',
-      cyan: 'bg-cyan-100 dark:bg-cyan-950/30 border-cyan-200 dark:border-cyan-900',
-      gray: 'bg-gray-100 dark:bg-gray-950/30 border-gray-200 dark:border-gray-900',
+      red: 'bg-red-50 dark:bg-red-950/10 border-red-300 dark:border-red-700',
+      blue: 'bg-blue-50 dark:bg-blue-950/10 border-blue-300 dark:border-blue-700',
+      green: 'bg-green-50 dark:bg-green-950/10 border-green-300 dark:border-green-700',
+      purple: 'bg-purple-50 dark:bg-purple-950/10 border-purple-300 dark:border-purple-700',
+      yellow: 'bg-yellow-50 dark:bg-yellow-950/10 border-yellow-300 dark:border-yellow-700',
+      orange: 'bg-orange-50 dark:bg-orange-950/10 border-orange-300 dark:border-orange-700',
+      cyan: 'bg-cyan-50 dark:bg-cyan-950/10 border-cyan-300 dark:border-cyan-700',
+      gray: 'bg-gray-50 dark:bg-gray-950/10 border-gray-300 dark:border-gray-700',
     };
     return colors[color as keyof typeof colors] || colors.gray;
   };
 
   const getRoleIconColor = (color: string) => {
     const colors = {
-      red: 'text-red-600 dark:text-red-400',
-      blue: 'text-blue-600 dark:text-blue-400',
-      green: 'text-green-600 dark:text-green-400',
-      purple: 'text-purple-600 dark:text-purple-400',
-      yellow: 'text-yellow-600 dark:text-yellow-400',
-      orange: 'text-orange-600 dark:text-orange-400',
-      cyan: 'text-cyan-600 dark:text-cyan-400',
-      gray: 'text-gray-600 dark:text-gray-400',
+      red: 'text-orange-300 dark:text-red-400',
+      blue: 'text-blue-500 dark:text-blue-400',
+      green: 'text-green-500 dark:text-green-400',
+      purple: 'text-purple-500 dark:text-purple-400',
+      yellow: 'text-yellow-500 dark:text-yellow-400',
+      orange: 'text-orange-500 dark:text-orange-400',
+      cyan: 'text-cyan-500 dark:text-cyan-400',
+      gray: 'text-gray-500 dark:text-gray-400',
     };
     return colors[color as keyof typeof colors] || colors.gray;
   };
