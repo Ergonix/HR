@@ -13,6 +13,7 @@ export {
   ViewDialog,
   EditDialog,
   DeleteDialog,
+  AddDialog,
   FormField,
   TextFormField,
   TextareaFormField
