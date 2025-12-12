@@ -90,6 +90,56 @@ export function EditDialog({ open, onOpenChange, title, description, onSubmit, o
   )
 }
 
+// Add/Create Dialog Component
+interface AddDialogProps {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  title: string
+  description?: string
+  onSubmit: (e: React.FormEvent) => void
+  onCancel: () => void
+  children: React.ReactNode
+  trigger?: React.ReactNode
+  submitText?: string
+}
+
+export function AddDialog({ 
+  open, 
+  onOpenChange, 
+  title, 
+  description, 
+  onSubmit, 
+  onCancel, 
+  children, 
+  trigger,
+  submitText = "Save"
+}: AddDialogProps) {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      {trigger}
+      <DialogContent className="sm:max-w-[500px]">
+        <form onSubmit={onSubmit}>
+          <DialogHeader>
+            <DialogTitle>{title}</DialogTitle>
+            {description && <DialogDescription>{description}</DialogDescription>}
+          </DialogHeader>
+          
+          <div className="grid gap-4 py-4">
+            {children}
+          </div>
+          
+          <DialogFooter>
+            <Button type="button" variant="outline" onClick={onCancel}>
+              Cancel
+            </Button>
+            <Button type="submit">{submitText}</Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
 // Delete Confirmation Dialog Component
 interface DeleteDialogProps {
   open: boolean

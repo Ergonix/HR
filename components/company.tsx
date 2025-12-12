@@ -5,8 +5,8 @@ import { InfoCard, ListCard, EmptyStateCard } from './ui/reusable-cards';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from './ui/dialog';
-import { ViewDialog, EditDialog, DeleteDialog, TextFormField, TextareaFormField } from './ui/reusable-dialogs';
+import { DialogTrigger } from './ui/dialog';
+import { ViewDialog, EditDialog, DeleteDialog, AddDialog, TextFormField, TextareaFormField } from './ui/reusable-dialogs';
 import {
   Select,
   SelectContent,
@@ -244,62 +244,48 @@ export function Company() {
         title="Company Management"
         description="Manage company information and settings"
         action={
-          <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+          <AddDialog
+            open={isAddDialogOpen}
+            onOpenChange={setIsAddDialogOpen}
+            title="Add New Company"
+            description="Enter the company details below. Click save when you're done."
+            onSubmit={handleAddSubmit}
+            onCancel={() => setIsAddDialogOpen(false)}
+            submitText="Save Company"
+            trigger={
               <DialogTrigger asChild>
                 <Button>
                   <Plus className="size-4" />
                   Add Company
                 </Button>
               </DialogTrigger>
-              <DialogContent className="sm:max-w-[500px]">
-                <form onSubmit={handleAddSubmit}>
-                  <DialogHeader>
-                    <DialogTitle>Add New Company</DialogTitle>
-                    <DialogDescription>
-                      Enter the company details below. Click save when you're done.
-                    </DialogDescription>
-                  </DialogHeader>
-                  
-                  <div className="grid gap-4 py-4">
-                    <TextFormField
-                      label="Company ID"
-                      name="companyId"
-                      value={formData.companyId}
-                      onChange={handleInputChange}
-                      placeholder="COM-005"
-                      required
-                    />
-                    <TextFormField
-                      label="Company Name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      placeholder="Enter company name"
-                      required
-                    />
-                    <TextareaFormField
-                      label="Description"
-                      name="description"
-                      value={formData.description}
-                      onChange={handleInputChange}
-                      placeholder="Enter company description"
-                      required
-                    />
-                  </div>
-                  
-                  <DialogFooter>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => setIsAddDialogOpen(false)}
-                    >
-                      Cancel
-                    </Button>
-                    <Button type="submit">Save Company</Button>
-                  </DialogFooter>
-                </form>
-              </DialogContent>
-          </Dialog>
+            }
+          >
+            <TextFormField
+              label="Company ID"
+              name="companyId"
+              value={formData.companyId}
+              onChange={handleInputChange}
+              placeholder="COM-005"
+              required
+            />
+            <TextFormField
+              label="Company Name"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+              placeholder="Enter company name"
+              required
+            />
+            <TextareaFormField
+              label="Description"
+              name="description"
+              value={formData.description}
+              onChange={handleInputChange}
+              placeholder="Enter company description"
+              required
+            />
+          </AddDialog>
         }
       >
           {/* Search and Filter Section */}

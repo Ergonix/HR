@@ -1,6 +1,8 @@
 import { useState, useMemo } from 'react';
 import { Plus, Eye, Pencil, Trash2, Search, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, Award } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { ListCard } from './ui/reusable-cards';
+import { ViewDialog, EditDialog, DeleteDialog, AddDialog, TextFormField, TextareaFormField } from './ui/reusable-dialogs';
+import { DialogTrigger } from './ui/dialog';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import {
@@ -12,25 +14,6 @@ import {
   TableRow,
 } from './ui/table';
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from './ui/dialog';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from './ui/alert-dialog';
-import {
   Select,
   SelectContent,
   SelectItem,
@@ -38,8 +21,6 @@ import {
   SelectValue,
 } from './ui/select';
 import { Input } from './ui/input';
-import { Label } from './ui/label';
-import { Textarea } from './ui/textarea';
 
 interface Company {
   id: number;
@@ -210,101 +191,70 @@ export function Designation() {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle className="flex items-center gap-2">
-              <Award className="size-5" />
-              Designations
-            </CardTitle>
-            <CardDescription>Manage designation information</CardDescription>
-          </div>
-          
-          <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-            <DialogTrigger asChild>
-              <Button>
-                <Plus className="size-4" />
-                Add Designation
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[500px]">
-              <form onSubmit={handleAddSubmit}>
-                <DialogHeader>
-                  <DialogTitle>Add New Designation</DialogTitle>
-                  <DialogDescription>
-                    Enter the designation details below. Click save when you're done.
-                  </DialogDescription>
-                </DialogHeader>
-                
-                <div className="grid gap-4 py-4">
-                  <div className="grid gap-2">
-                    <Label htmlFor="designationId">Designation ID</Label>
-                    <Input
-                      id="designationId"
-                      name="designationId"
-                      placeholder="DES-013"
-                      value={formData.designationId}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </div>
-                  
-                  <div className="grid gap-2">
-                    <Label htmlFor="title">Title</Label>
-                    <Input
-                      id="title"
-                      name="title"
-                      placeholder="Enter designation title"
-                      value={formData.title}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </div>
-                  
-                  <div className="grid gap-2">
-                    <Label htmlFor="description">Description</Label>
-                    <Textarea
-                      id="description"
-                      name="description"
-                      placeholder="Enter designation description"
-                      value={formData.description}
-                      onChange={handleInputChange}
-                      rows={4}
-                      required
-                    />
-                  </div>
-                  
-                  <div className="grid gap-2">
-                    <Label htmlFor="companyId">Company</Label>
-                    <Select value={formData.companyId} onValueChange={handleCompanyChange}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a company" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {companies.map(company => (
-                          <SelectItem key={company.id} value={company.id.toString()}>
-                            {company.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-                
-                <DialogFooter>
-                  <Button type="button" variant="outline" onClick={() => setIsAddDialogOpen(false)}>
-                    Cancel
-                  </Button>
-                  <Button type="submit">Save Designation</Button>
-                </DialogFooter>
-              </form>
-            </DialogContent>
-          </Dialog>
-        </div>
-      </CardHeader>
-      
-      <CardContent>
+    <>
+      <ListCard
+        title="Designations"
+        description="Manage designation information"
+        action={
+          <AddDialog
+            open={isAddDialogOpen}
+            onOpenChange={setIsAddDialogOpen}
+            title="Add New Designation"
+            description="Enter the designation details below. Click save when you're done."
+            onSubmit={handleAddSubmit}
+            onCancel={() => setIsAddDialogOpen(false)}
+            submitText="Save Designation"
+            trigger={
+              <DialogTrigger asChild>
+                <Button>
+                  <Plus className="size-4" />
+                  Add Designation
+                </Button>
+              </DialogTrigger>
+            }
+          >
+            <TextFormField
+              label="Designation ID"
+              name="designationId"
+              value={formData.designationId}
+              onChange={handleInputChange}
+              placeholder="DES-013"
+              required
+            />
+            <TextFormField
+              label="Title"
+              name="title"
+              value={formData.title}
+              onChange={handleInputChange}
+              placeholder="Enter designation title"
+              required
+            />
+            <TextareaFormField
+              label="Description"
+              name="description"
+              value={formData.description}
+              onChange={handleInputChange}
+              placeholder="Enter designation description"
+              required
+            />
+            <div className="grid gap-2">
+              <label className="text-sm font-medium">Company<span className="text-destructive">*</span></label>
+              <Select value={formData.companyId} onValueChange={handleCompanyChange}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a company" />
+                </SelectTrigger>
+                <SelectContent>
+                  {companies.map(company => (
+                    <SelectItem key={company.id} value={company.id.toString()}>
+                      {company.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </AddDialog>
+        }
+      >
         {/* Search and Filter Section */}
         <div className="flex items-center gap-4 mb-4">
           <div className="relative flex-1">
@@ -448,121 +398,90 @@ export function Designation() {
             </div>
           </div>
         </div>
-      </CardContent>
+      </ListCard>
 
-      {/* View Dialog */}
-      <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
-        <DialogContent className="sm:max-w-[500px]">
-          <DialogHeader>
-            <DialogTitle>Designation Details</DialogTitle>
-            <DialogDescription>View complete information about this designation.</DialogDescription>
-          </DialogHeader>
-          
-          {selectedDesignation && (
-            <div className="grid gap-4 py-4">
-              <div className="grid gap-2">
-                <Label className="text-muted-foreground">Designation ID</Label>
-                <div className="text-sm">{selectedDesignation.designationId}</div>
-              </div>
-              <div className="grid gap-2">
-                <Label className="text-muted-foreground">Title</Label>
-                <div className="text-sm">{selectedDesignation.title}</div>
-              </div>
-              <div className="grid gap-2">
-                <Label className="text-muted-foreground">Company</Label>
-                <div>
-                  <Badge variant="outline">{getCompanyName(selectedDesignation.companyId)}</Badge>
-                </div>
-              </div>
-              <div className="grid gap-2">
-                <Label className="text-muted-foreground">Description</Label>
-                <div className="text-sm">{selectedDesignation.description}</div>
-              </div>
-              <div className="grid gap-2">
-                <Label className="text-muted-foreground">Status</Label>
-                <div>
-                  <Badge variant={selectedDesignation.status === 'Active' ? 'default' : 'secondary'}>
-                    {selectedDesignation.status}
-                  </Badge>
-                </div>
-              </div>
-            </div>
-          )}
-          
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsViewDialogOpen(false)}>Close</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <ViewDialog
+        open={isViewDialogOpen}
+        onOpenChange={setIsViewDialogOpen}
+        title="Designation Details"
+        description="View complete information about this designation."
+        data={selectedDesignation}
+        fields={[
+          { key: 'designationId', label: 'Designation ID' },
+          { key: 'title', label: 'Title' },
+          { 
+            key: 'companyId', 
+            label: 'Company',
+            render: (value) => <Badge variant="outline">{getCompanyName(value)}</Badge>
+          },
+          { key: 'description', label: 'Description' },
+          { 
+            key: 'status', 
+            label: 'Status',
+            render: (value) => (
+              <Badge variant={value === 'Active' ? 'default' : 'secondary'}>
+                {value}
+              </Badge>
+            )
+          }
+        ]}
+      />
 
-      {/* Edit Dialog */}
-      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent className="sm:max-w-[500px]">
-          <form onSubmit={handleEditSubmit}>
-            <DialogHeader>
-              <DialogTitle>Edit Designation</DialogTitle>
-              <DialogDescription>Update the designation details below. Click save when you're done.</DialogDescription>
-            </DialogHeader>
-            
-            <div className="grid gap-4 py-4">
-              <div className="grid gap-2">
-                <Label htmlFor="edit-designationId">Designation ID</Label>
-                <Input id="edit-designationId" name="designationId" value={formData.designationId} onChange={handleInputChange} required />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="edit-title">Title</Label>
-                <Input id="edit-title" name="title" value={formData.title} onChange={handleInputChange} required />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="edit-description">Description</Label>
-                <Textarea id="edit-description" name="description" value={formData.description} onChange={handleInputChange} rows={4} required />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="edit-companyId">Company</Label>
-                <Select value={formData.companyId} onValueChange={handleCompanyChange}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a company" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {companies.map(company => (
-                      <SelectItem key={company.id} value={company.id.toString()}>
-                        {company.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            
-            <DialogFooter>
-              <Button type="button" variant="outline" onClick={() => { setIsEditDialogOpen(false); setFormData({ designationId: '', title: '', description: '', companyId: '' }); }}>
-                Cancel
-              </Button>
-              <Button type="submit">Save Changes</Button>
-            </DialogFooter>
-          </form>
-        </DialogContent>
-      </Dialog>
+      <EditDialog
+        open={isEditDialogOpen}
+        onOpenChange={setIsEditDialogOpen}
+        title="Edit Designation"
+        description="Update the designation details below. Click save when you're done."
+        onSubmit={handleEditSubmit}
+        onCancel={() => {
+          setIsEditDialogOpen(false);
+          setFormData({ designationId: '', title: '', description: '', companyId: '' });
+        }}
+      >
+        <TextFormField
+          label="Designation ID"
+          name="designationId"
+          value={formData.designationId}
+          onChange={handleInputChange}
+          required
+        />
+        <TextFormField
+          label="Title"
+          name="title"
+          value={formData.title}
+          onChange={handleInputChange}
+          required
+        />
+        <TextareaFormField
+          label="Description"
+          name="description"
+          value={formData.description}
+          onChange={handleInputChange}
+          required
+        />
+        <div className="grid gap-2">
+          <label className="text-sm font-medium">Company<span className="text-destructive">*</span></label>
+          <Select value={formData.companyId} onValueChange={handleCompanyChange}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select a company" />
+            </SelectTrigger>
+            <SelectContent>
+              {companies.map(company => (
+                <SelectItem key={company.id} value={company.id.toString()}>
+                  {company.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </EditDialog>
 
-      {/* Delete Confirmation Dialog */}
-      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete the designation
-              <span className="font-semibold"> {selectedDesignation?.title}</span> and remove 
-              all associated data from the system.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </Card>
+      <DeleteDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+        description={`This action cannot be undone. This will permanently delete the designation ${selectedDesignation?.title} and remove all associated data from the system.`}
+        onConfirm={handleDelete}
+      />
+    </>
   );
 }
