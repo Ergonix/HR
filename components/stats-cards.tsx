@@ -1,5 +1,5 @@
-import { Users, UserCheck, Calendar, Megaphone, TrendingUp, ArrowUpRight, ArrowDownRight, Clock, Building2 } from 'lucide-react';
-import { Card, CardContent } from './ui/card';
+import { Users, UserCheck, Calendar, Megaphone, TrendingUp, Clock, Building2 } from 'lucide-react';
+import { StatsCard } from './ui/reusable-cards';
 
 const stats = [
   {
@@ -87,49 +87,19 @@ const stats = [
 export function StatsCards() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      {stats.map((stat) => {
-        const Icon = stat.icon;
-        const TrendIcon = stat.trend === 'up' ? ArrowUpRight : stat.trend === 'down' ? ArrowDownRight : null;
-        
-        return (
-          <Card key={stat.label} className="overflow-hidden hover:shadow-lg transition-shadow">
-            <CardContent className="p-0">
-              <div className={`${stat.bgAccent} p-6`}>
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex-1">
-                    <p className="text-sm text-muted-foreground font-medium">{stat.label}</p>
-                  </div>
-                  <div className={`${stat.color} size-12 rounded-xl flex items-center justify-center shadow-lg`}>
-                    <Icon className="size-6 text-white" />
-                  </div>
-                </div>
-                
-                <div className="space-y-1">
-                  <h3 className="text-3xl font-bold">{stat.value}</h3>
-                  <p className="text-sm text-muted-foreground">{stat.subValue}</p>
-                </div>
-                
-                <div className="flex items-center gap-1 mt-3">
-                  {TrendIcon && (
-                    <TrendIcon className={`size-4 ${
-                      stat.trend === 'up' ? 'text-green-600 dark:text-green-400' : 
-                      stat.trend === 'down' ? 'text-red-600 dark:text-red-400' : 
-                      'text-muted-foreground'
-                    }`} />
-                  )}
-                  <span className={`text-xs font-medium ${
-                    stat.trend === 'up' ? 'text-green-600 dark:text-green-400' : 
-                    stat.trend === 'down' ? 'text-red-600 dark:text-red-400' : 
-                    'text-muted-foreground'
-                  }`}>
-                    {stat.change}
-                  </span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        );
-      })}
+      {stats.map((stat) => (
+        <StatsCard
+          key={stat.label}
+          label={stat.label}
+          value={stat.value}
+          subValue={stat.subValue}
+          change={stat.change}
+          trend={stat.trend}
+          icon={stat.icon}
+          color={stat.color}
+          bgAccent={stat.bgAccent}
+        />
+      ))}
     </div>
   );
 }
