@@ -23,6 +23,7 @@ import { NavDocuments } from "@/components/nav-documents"
 import { NavMain } from "@/components/nav-main"
 import { NavSecondary } from "@/components/nav-secondary"
 import { NavUser } from "@/components/nav-user"
+import { ComponentType } from "react"
 import {
   Sidebar,
   SidebarContent,
@@ -33,7 +34,23 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 
-const data = {
+const data: {
+  user: {
+    name: string
+    email: string
+    avatar: string
+  }
+  navMain: {
+    title: string
+    url: string
+    icon: ComponentType<any>
+  }[]
+  navSecondary: {
+    title: string
+    url: string
+    icon: ComponentType<any>
+  }[]
+} = {
   user: {
     name: "John Doe",
     email: "john@company.com",
